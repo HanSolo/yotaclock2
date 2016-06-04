@@ -153,7 +153,7 @@ class YotaClock2View extends Ui.WatchFace {
         dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -146, -126);
         dc.setColor(Gfx.COLOR_DK_RED, Gfx.COLOR_TRANSPARENT);
-        var seg1FillAngle = steps > stepsPerSegment1 ? -146 : (-126 - ((1 - steps.toDouble() / stepsPerSegment1)) * 20d).toNumber();
+        var seg1FillAngle = steps > stepsPerSegment1 ? -146 : (-126 - ((1 - (stepsPerSegment1 - steps.toDouble()) / stepsPerSegment1)) * 20d).toNumber();
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg1FillAngle == -126 ? -127 : seg1FillAngle, -126);
 
         dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
