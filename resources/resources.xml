@@ -1,0 +1,13 @@
+<resources>
+    <string id="AppName">YotaClock2</string>
+
+    <bitmap id="LauncherIcon" filename="drawables/launcher_icon.png" />
+    <bitmap id="tickmarks"    filename="drawables/tickmarks.png" />
+    <bitmap id="batteryIcon"  filename="drawables/battery.png" />
+    <bitmap id="stepsIcon"    filename="drawables/steps.png" />
+    <bitmap id="heartIcon"    filename="drawables/heart.png" />
+
+    <fonts>
+        <font id="roboto14Regular" filename="fonts/Roboto_Regular_14.fnt" filter="kcalADEFHIMNORSTUW0123456789. "/>
+    </fonts>
+</resources>

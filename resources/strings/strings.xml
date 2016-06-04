@@ -1,0 +1,15 @@
+<strings>
+
+    <string id="AppName">YotaClock2</string>
+    
+    <string id="Gender">Gender</string>
+    <string id="Female">Female</string>
+    <string id="Male">Male</string>    
+
+	<string id="Weight">Weight [kg]</string>
+	
+	<string id="Height">Height [cm]</string>
+	
+	<string id="Age">Age</string>
+
+</strings>
