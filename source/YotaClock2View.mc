@@ -127,24 +127,67 @@ class YotaClock2View extends Ui.WatchFace {
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         dc.drawText(93, 116, smallFont, stepsString, Gfx.TEXT_JUSTIFY_LEFT);
     
-        // Left Segments (Steps)        
-        var activeSegments = ((steps.toDouble() / stepGoal.toDouble()) * 5d).toNumber();        
-        
+        // Left Segments (Steps)    
+        var stepsPerSegment1 = (stepGoal.toDouble() / 5d).toNumber();
+        var stepsPerSegment2 = (2d * stepsPerSegment1).toNumber();
+        var stepsPerSegment3 = (3d * stepsPerSegment1).toNumber();
+        var stepsPerSegment4 = (4d * stepsPerSegment1).toNumber();
+        var stepsPerSegment5 = (5d * stepsPerSegment1).toNumber();
+                
+        var activeSegments;
+        if (steps >= stepsPerSegment5) {
+            activeSegments = 5;
+        } else if (steps >= stepsPerSegment4) {
+            activeSegments = 4;
+        } else if (steps >= stepsPerSegment3) {
+            activeSegments = 3;
+        } else if (steps >= stepsPerSegment2) {
+            activeSegments = 2;
+        } else if (steps >= stepsPerSegment1) {
+            activeSegments = 1;
+        } else {
+            activeSegments = 0;
+        }
+                
         dc.setPenWidth(11);           
-        dc.setColor(activeSegments >= 1 ? Gfx.COLOR_DK_RED : Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -146, -126);
-        
-        dc.setColor(activeSegments >= 2 ? Gfx.COLOR_ORANGE : Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -168, -148);
+        dc.setColor(Gfx.COLOR_DK_RED, Gfx.COLOR_TRANSPARENT);
+        var seg1FillAngle = steps > stepsPerSegment1 ? -146 : (-126 - ((1 - steps.toDouble() / stepsPerSegment1)) * 20d).toNumber();
+        dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg1FillAngle == -126 ? -127 : seg1FillAngle, -126);
 
-        dc.setColor(activeSegments >= 3 ? Gfx.COLOR_YELLOW : Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -190, -170);
+        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -168, -148);
+        if (steps >= stepsPerSegment1) {
+            dc.setColor(Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
+            var seg2FillAngle = steps >= stepsPerSegment2 ? -168 : (-148 - ((1 - (stepsPerSegment2 - steps.toDouble()) / stepsPerSegment1)) * 20d).toNumber();
+            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg2FillAngle == -148 ? -149 : seg2FillAngle, -148);
+        }        
+
+        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -190, -170);        
+        if (steps >= stepsPerSegment2) {            
+            dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+            var seg3FillAngle = steps >= stepsPerSegment3 ? -190 : (-170 - ((1 - (stepsPerSegment3 - steps.toDouble()) / stepsPerSegment1)) * 20d).toNumber();
+            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg3FillAngle == -170 ? -171 : seg3FillAngle, -170);
+        }
         
-        dc.setColor(activeSegments >= 4 ? Gfx.COLOR_DK_GREEN : Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -212, -192);
+        if (steps >= stepsPerSegment3) {            
+            dc.setColor(Gfx.COLOR_DK_GREEN, Gfx.COLOR_TRANSPARENT);
+            var seg4FillAngle = steps >= stepsPerSegment4 ? -212 : (-192 - ((1 - (stepsPerSegment4 - steps.toDouble() )/ stepsPerSegment1)) * 20d).toNumber();
+            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg4FillAngle == -192 ? -193 : seg4FillAngle, -192);
+        }
         
-        dc.setColor(activeSegments >= 5 ? Gfx.COLOR_GREEN : Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -234, -214);
+        if (steps >= stepsPerSegment4) {
+            dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+            var seg5FillAngle = steps >= stepsPerSegment5 ? -234 : (-214 - ((1 - (stepsPerSegment5 - steps.toDouble()) / stepsPerSegment1)) * 20d).toNumber();
+            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg5FillAngle == -214 ? -215 : seg5FillAngle, -214);
+        }
+        
 
         // Right Bar
         var endAngle = kcal == 0 ? -53.9999d : ((kcal.toDouble() / goal.toDouble()) * 108d - 54d).toNumber();        
