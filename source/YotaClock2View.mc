@@ -15,7 +15,7 @@ using Toybox.UserProfile as UserProfile;
 
 class YotaClock2View extends Ui.WatchFace {
     var font14Regular;
-    var tickmarks, batteryIcon, stepsIcon, heartIcon;    
+    var tickmarks, batteryIcon, stepsIcon, heartIcon, bleIcon;    
     var heartRate;
 
     function initialize() {
@@ -28,7 +28,8 @@ class YotaClock2View extends Ui.WatchFace {
         tickmarks     = Ui.loadResource(Rez.Drawables.tickmarks);
         batteryIcon   = Ui.loadResource(Rez.Drawables.batteryIcon);
         stepsIcon     = Ui.loadResource(Rez.Drawables.stepsIcon);
-        heartIcon     = Ui.loadResource(Rez.Drawables.heartIcon);        
+        heartIcon     = Ui.loadResource(Rez.Drawables.heartIcon);
+        bleIcon       = Ui.loadResource(Rez.Drawables.bleIcon);        
     }
 
     //! Called when this View is brought to the foreground. Restore
@@ -59,6 +60,7 @@ class YotaClock2View extends Ui.WatchFace {
         var charge      = systemStats.battery;                
         var smallFont   = font14Regular;
         var dayOfWeek   = nowinfo.day_of_week;
+        var connected   = Sys.getDeviceSettings().phoneConnected;
         var hour;
         var minute;
         var dateString;
@@ -126,6 +128,10 @@ class YotaClock2View extends Ui.WatchFace {
         dc.drawBitmap(78, 120, stepsIcon);
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         dc.drawText(93, 116, smallFont, stepsString, Gfx.TEXT_JUSTIFY_LEFT);
+    
+        // BLE
+        if (connected) { dc.drawBitmap(104, 142, bleIcon); }        
+        
     
         // Left Segments (Steps)    
         var stepsPerSegment1 = (stepGoal.toDouble() / 5d).toNumber();
