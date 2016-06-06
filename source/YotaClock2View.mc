@@ -46,7 +46,7 @@ class YotaClock2View extends Ui.WatchFace {
     //! Update the view
     function onUpdate(dc) {
         View.onUpdate(dc);
-                
+
         // General
         var width       = dc.getWidth();
         var height      = dc.getHeight();
@@ -67,23 +67,24 @@ class YotaClock2View extends Ui.WatchFace {
         var smallFont   = font14Regular;
         var dayOfWeek   = nowinfo.day_of_week;
         var connected   = Sys.getDeviceSettings().phoneConnected;
+        
         var hour;
         var minute;
         var dateString;
         if (1 == dayOfWeek) { 
-            dateString = Lang.format("SUN " + nowinfo.day.format("%02d")); 
+            dateString = Lang.format("SU " + nowinfo.day.format("%02d")); 
         } else if (2 == dayOfWeek) {
-            dateString = Lang.format("MON " + nowinfo.day.format("%02d"));
+            dateString = Lang.format("MO " + nowinfo.day.format("%02d"));
         } else if (3 == dayOfWeek) {
-            dateString = Lang.format("TUE " + nowinfo.day.format("%02d"));
+            dateString = Lang.format("TU " + nowinfo.day.format("%02d"));
         } else if (4 == dayOfWeek) {
-            dateString = Lang.format("WED " + nowinfo.day.format("%02d"));
+            dateString = Lang.format("WE " + nowinfo.day.format("%02d"));
         } else if (5 == dayOfWeek) {
-            dateString = Lang.format("THU " + nowinfo.day.format("%02d"));
+            dateString = Lang.format("TH " + nowinfo.day.format("%02d"));
         } else if (6 == dayOfWeek) {
-            dateString = Lang.format("FRI " + nowinfo.day.format("%02d"));
+            dateString = Lang.format("FR " + nowinfo.day.format("%02d"));
         } else {
-            dateString = Lang.format("SAT " + nowinfo.day.format("%02d")); 
+            dateString = Lang.format("SA " + nowinfo.day.format("%02d")); 
         }
         
         var profile = UserProfile.getProfile();
