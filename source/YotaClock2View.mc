@@ -15,7 +15,7 @@ using Toybox.UserProfile as UserProfile;
 
 class YotaClock2View extends Ui.WatchFace {
     var font14Regular;
-    var tickmarks, batteryIcon, stepsIcon, heartIcon, bleIcon;    
+    var tickmarks, batteryIcon, stepsIcon, heartIcon, heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon, bleIcon;    
     var heartRate;
 
     function initialize() {
@@ -24,12 +24,17 @@ class YotaClock2View extends Ui.WatchFace {
 
     //! Load your resources here
     function onLayout(dc) {        
-        font14Regular = Ui.loadResource(Rez.Fonts.roboto14Regular);
-        tickmarks     = Ui.loadResource(Rez.Drawables.tickmarks);
-        batteryIcon   = Ui.loadResource(Rez.Drawables.batteryIcon);
-        stepsIcon     = Ui.loadResource(Rez.Drawables.stepsIcon);
-        heartIcon     = Ui.loadResource(Rez.Drawables.heartIcon);
-        bleIcon       = Ui.loadResource(Rez.Drawables.bleIcon);        
+        font14Regular  = Ui.loadResource(Rez.Fonts.roboto14Regular);
+        tickmarks      = Ui.loadResource(Rez.Drawables.tickmarks);
+        batteryIcon    = Ui.loadResource(Rez.Drawables.batteryIcon);
+        stepsIcon      = Ui.loadResource(Rez.Drawables.stepsIcon);
+        heartIcon      = Ui.loadResource(Rez.Drawables.heartIcon);
+        heartZone1Icon = Ui.loadResource(Rez.Drawables.heartZone1Icon);
+        heartZone2Icon = Ui.loadResource(Rez.Drawables.heartZone2Icon);
+        heartZone3Icon = Ui.loadResource(Rez.Drawables.heartZone3Icon);
+        heartZone4Icon = Ui.loadResource(Rez.Drawables.heartZone4Icon);
+        heartZone5Icon = Ui.loadResource(Rez.Drawables.heartZone5Icon);
+        bleIcon        = Ui.loadResource(Rez.Drawables.bleIcon);        
     }
 
     //! Called when this View is brought to the foreground. Restore
@@ -55,8 +60,9 @@ class YotaClock2View extends Ui.WatchFace {
         var stepGoal    = actinfo.stepGoal;
         var stepsString = steps.toString();
         var kcal        = actinfo.calories;
-        var kcalString  = kcal.toString() + " kcal";                
-        var bpmString   = (hr.heartRate != Act.INVALID_HR_SAMPLE && hr.heartRate > 0) ? hr.heartRate : "";
+        var kcalString  = kcal.toString() + " kcal";  
+        var bpm         = (hr.heartRate != Act.INVALID_HR_SAMPLE && hr.heartRate > 0) ? hr.heartRate : 0;
+        var bpmString   = bpm > 0 ? bpm.toString() : "";
         var charge      = systemStats.battery;                
         var smallFont   = font14Regular;
         var dayOfWeek   = nowinfo.day_of_week;
@@ -102,6 +108,28 @@ class YotaClock2View extends Ui.WatchFace {
         var goalWoman  = 655d + (9.6 * userWeight) + (1.8 * userHeight) - (4.7 * userAge);
         var goal       = gender == 1 ? goalMen : goalWoman;
         
+        
+        var showBpmZones = Application.getApp().getProperty("BpmZones");
+        var maxBpm       = gender == 1 ? (223 - 0.9 * userAge).toNumber() : (226 - 1.0 * userAge).toNumber();        
+        var bpmZone1     = (0.5 * maxBpm).toNumber();
+        var bpmZone2     = (0.6 * maxBpm).toNumber();
+        var bpmZone3     = (0.7 * maxBpm).toNumber();
+        var bpmZone4     = (0.8 * maxBpm).toNumber();
+        var bpmZone5     = (0.9 * maxBpm).toNumber();
+        var currentZone;
+                
+        if (bpm >= bpmZone5) {
+            currentZone = 5;
+        } else if (bpm >= bpmZone4) {
+            currentZone = 4;
+        } else if (bpm >= bpmZone3) {
+            currentZone = 3;
+        } else if (bpm >= bpmZone2) {
+            currentZone = 2;
+        } else {
+            currentZone = 1;
+        }
+                
             
         // Tickmarks
         dc.drawBitmap(0, 0, tickmarks);
@@ -120,8 +148,24 @@ class YotaClock2View extends Ui.WatchFace {
         dc.drawText(width * 0.5, 43, smallFont, kcalString, Gfx.TEXT_JUSTIFY_CENTER);        
 
         // BPM
-        dc.drawBitmap(40, 82, heartIcon);
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        if (showBpmZones) {
+            if(currentZone == 1) {
+                dc.drawBitmap(40, 82, heartZone1Icon);
+            } else if (currentZone == 2) {
+                dc.drawBitmap(40, 82, heartZone2Icon);
+            } else if (currentZone == 3) {
+                dc.drawBitmap(40, 82, heartZone3Icon);
+            } else if (currentZone == 4) {
+                dc.drawBitmap(40, 82, heartZone4Icon);
+            } else if (currentZone == 5) {
+                dc.drawBitmap(40, 82, heartZone5Icon);
+            } else {
+                dc.drawBitmap(40, 82, heartIcon);
+            }
+        } else {
+            dc.drawBitmap(40, 82, heartIcon);
+        }
+        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);        
         dc.drawText(60, 78, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
         
         // Steps

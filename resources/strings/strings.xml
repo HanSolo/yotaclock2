@@ -11,5 +11,7 @@
 	<string id="Height">Height [cm]</string>
 	
 	<string id="Age">Age</string>
+	
+	<string id="BpmZones">Visualize BPM Zones</string>
 
 </strings>
