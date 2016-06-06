@@ -140,7 +140,10 @@ class YotaClock2View extends Ui.WatchFace {
         dc.setColor(charge < 20 ? Gfx.COLOR_RED : Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(97, 24 , 20.0 * charge / 100, 7);
     
-        // Date
+        // Date        
+        //dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        //dc.fillRoundedRectangle(124, 81, 55, 18, 4);
+        //dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         dc.drawText(178, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
     
