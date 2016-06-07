@@ -22,5 +22,18 @@
     <setting propertyKey="@Properties.BpmZones" title="@Strings.BpmZones">
         <settingConfig type="boolean" />
     </setting>    
-
+    
+    <setting propertyKey="@Properties.Theme" title="@Strings.Theme">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.Dark</listEntry>
+            <listEntry value="1">@Strings.Light</listEntry>
+        </settingConfig>
+    </setting>
+    
+    <setting propertyKey="@Properties.BoldFonts" title="@Strings.BoldFonts">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.RegularFont</listEntry>
+            <listEntry value="1">@Strings.BoldFont</listEntry>
+        </settingConfig>
+    </setting>
 </settings>

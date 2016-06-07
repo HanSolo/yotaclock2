@@ -1,13 +1,18 @@
 <drawables>
-    <bitmap id="LauncherIcon"   filename="launcher_icon.png" />
-    <bitmap id="tickmarks"      filename="tickmarks.png" />
-    <bitmap id="batteryIcon"    filename="battery.png" />
-    <bitmap id="stepsIcon"      filename="steps.png" />
-    <bitmap id="heartIcon"      filename="heart.png" />
-    <bitmap id="heartZone1Icon" filename="heartZone1.png" />
-    <bitmap id="heartZone2Icon" filename="heartZone2.png" />
-    <bitmap id="heartZone3Icon" filename="heartZone3.png" />
-    <bitmap id="heartZone4Icon" filename="heartZone4.png" />
-    <bitmap id="heartZone5Icon" filename="heartZone5.png" />
-    <bitmap id="bleIcon"        filename="ble.png" />
+    <bitmap id="LauncherIcon"     filename="launcher_icon.png" />
+    <bitmap id="darkTickmarks"    filename="darkTickmarks.png" />
+    <bitmap id="lightTickmarks"   filename="lightTickmarks.png" />
+    <bitmap id="darkBatteryIcon"  filename="darkBattery.png" />
+    <bitmap id="lightBatteryIcon" filename="lightBattery.png" />
+    <bitmap id="darkStepsIcon"    filename="darkSteps.png" />
+    <bitmap id="lightStepsIcon"   filename="lightSteps.png" />
+    <bitmap id="darkHeartIcon"    filename="darkHeart.png" />
+    <bitmap id="lightHeartIcon"   filename="lightHeart.png" />
+    <bitmap id="heartZone1Icon"   filename="heartZone1.png" />
+    <bitmap id="heartZone2Icon"   filename="heartZone2.png" />
+    <bitmap id="heartZone3Icon"   filename="heartZone3.png" />
+    <bitmap id="heartZone4Icon"   filename="heartZone4.png" />
+    <bitmap id="heartZone5Icon"   filename="heartZone5.png" />
+    <bitmap id="darkBleIcon"      filename="darkBle.png" />
+    <bitmap id="lightBleIcon"     filename="lightBle.png" />
 </drawables>

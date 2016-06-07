@@ -14,9 +14,15 @@ using Toybox.UserProfile as UserProfile;
 
 
 class YotaClock2View extends Ui.WatchFace {
-    var font14Regular;
-    var tickmarks, batteryIcon, stepsIcon, heartIcon, heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon, bleIcon;    
+    var font14Regular, font14Bold;
+    var darkTickmarks, lightTickmarks;
+    var darkBatteryIcon, lightBatteryIcon;
+    var darkStepsIcon, lightStepsIcon;
+    var darkHeartIcon, lightHeartIcon;
+    var heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon;
+    var darkBleIcon, lightBleIcon;    
     var heartRate;
+    var boldFonts;
 
     function initialize() {
         WatchFace.initialize();
@@ -24,17 +30,23 @@ class YotaClock2View extends Ui.WatchFace {
 
     //! Load your resources here
     function onLayout(dc) {        
-        font14Regular  = Ui.loadResource(Rez.Fonts.roboto14Regular);
-        tickmarks      = Ui.loadResource(Rez.Drawables.tickmarks);
-        batteryIcon    = Ui.loadResource(Rez.Drawables.batteryIcon);
-        stepsIcon      = Ui.loadResource(Rez.Drawables.stepsIcon);
-        heartIcon      = Ui.loadResource(Rez.Drawables.heartIcon);
-        heartZone1Icon = Ui.loadResource(Rez.Drawables.heartZone1Icon);
-        heartZone2Icon = Ui.loadResource(Rez.Drawables.heartZone2Icon);
-        heartZone3Icon = Ui.loadResource(Rez.Drawables.heartZone3Icon);
-        heartZone4Icon = Ui.loadResource(Rez.Drawables.heartZone4Icon);
-        heartZone5Icon = Ui.loadResource(Rez.Drawables.heartZone5Icon);
-        bleIcon        = Ui.loadResource(Rez.Drawables.bleIcon);        
+        font14Regular    = Ui.loadResource(Rez.Fonts.roboto14Regular);
+        font14Bold       = Ui.loadResource(Rez.Fonts.roboto14Medium);
+        lightTickmarks   = Ui.loadResource(Rez.Drawables.lightTickmarks);
+        darkTickmarks    = Ui.loadResource(Rez.Drawables.darkTickmarks);
+        lightBatteryIcon = Ui.loadResource(Rez.Drawables.lightBatteryIcon);
+        darkBatteryIcon  = Ui.loadResource(Rez.Drawables.darkBatteryIcon);
+        lightStepsIcon   = Ui.loadResource(Rez.Drawables.lightStepsIcon);
+        darkStepsIcon    = Ui.loadResource(Rez.Drawables.darkStepsIcon);
+        lightHeartIcon   = Ui.loadResource(Rez.Drawables.lightHeartIcon);
+        darkHeartIcon    = Ui.loadResource(Rez.Drawables.darkHeartIcon);
+        heartZone1Icon   = Ui.loadResource(Rez.Drawables.heartZone1Icon);
+        heartZone2Icon   = Ui.loadResource(Rez.Drawables.heartZone2Icon);
+        heartZone3Icon   = Ui.loadResource(Rez.Drawables.heartZone3Icon);
+        heartZone4Icon   = Ui.loadResource(Rez.Drawables.heartZone4Icon);
+        heartZone5Icon   = Ui.loadResource(Rez.Drawables.heartZone5Icon);
+        lightBleIcon     = Ui.loadResource(Rez.Drawables.lightBleIcon);
+        darkBleIcon      = Ui.loadResource(Rez.Drawables.darkBleIcon);        
     }
 
     //! Called when this View is brought to the foreground. Restore
@@ -48,25 +60,32 @@ class YotaClock2View extends Ui.WatchFace {
         View.onUpdate(dc);
 
         // General
-        var width       = dc.getWidth();
-        var height      = dc.getHeight();
-        var clockTime   = Sys.getClockTime();
-        var nowinfo     = Greg.info(Time.now(), Time.FORMAT_SHORT);
-        var actinfo     = Act.getInfo();
-        var systemStats = Sys.getSystemStats();
-        var hrIter      = Act.getHeartRateHistory(null, true);
-        var hr          = hrIter.next();        
-        var steps       = actinfo.steps;
-        var stepGoal    = actinfo.stepGoal;
-        var stepsString = steps.toString();
-        var kcal        = actinfo.calories;
-        var kcalString  = kcal.toString() + " kcal";  
-        var bpm         = (hr.heartRate != Act.INVALID_HR_SAMPLE && hr.heartRate > 0) ? hr.heartRate : 0;
-        var bpmString   = bpm > 0 ? bpm.toString() : "";
-        var charge      = systemStats.battery;                
-        var smallFont   = font14Regular;
-        var dayOfWeek   = nowinfo.day_of_week;
-        var connected   = Sys.getDeviceSettings().phoneConnected;
+        var width          = dc.getWidth();
+        var height         = dc.getHeight();        
+        var clockTime      = Sys.getClockTime();
+        var nowinfo        = Greg.info(Time.now(), Time.FORMAT_SHORT);
+        var actinfo        = Act.getInfo();
+        var systemStats    = Sys.getSystemStats();
+        var hrIter         = Act.getHeartRateHistory(null, true);
+        var hr             = hrIter.next();        
+        var steps          = actinfo.steps;
+        var stepGoal       = actinfo.stepGoal;
+        var stepsString    = steps.toString();
+        var kcal           = actinfo.calories;
+        var kcalString     = kcal.toString() + " kcal";  
+        var bpm            = (hr.heartRate != Act.INVALID_HR_SAMPLE && hr.heartRate > 0) ? hr.heartRate : 0;
+        var bpmString      = bpm > 0 ? bpm.toString() : "";
+        var charge         = systemStats.battery;                        
+        var dayOfWeek      = nowinfo.day_of_week;
+        var connected      = Sys.getDeviceSettings().phoneConnected;
+        var theme          = Application.getApp().getProperty("Theme");
+        var bgColor        = theme == 0 ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
+        var fgColor        = theme == 0 ? Gfx.COLOR_LT_GRAY : Gfx.COLOR_BLACK;
+        var textColor      = theme == 0 ? Gfx.COLOR_WHITE : Gfx.COLOR_BLACK;
+        var segmentBgColor = theme == 0 ? Gfx.COLOR_DK_GRAY : Gfx.COLOR_LT_GRAY;
+        var boldFonts      = Application.getApp().getProperty("BoldFonts");
+        var smallFont      = boldFonts == 0 ? font14Regular : font14Bold;
+        
         
         var hour;
         var minute;
@@ -131,25 +150,33 @@ class YotaClock2View extends Ui.WatchFace {
             currentZone = 1;
         }
                 
-            
+                
+        // Clear the screen
+        dc.setColor(theme == 0 ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        dc.fillRectangle(0, 0, width, height);
+        
+        
         // Tickmarks
-        dc.drawBitmap(0, 0, tickmarks);
+        dc.drawBitmap(0, 0, theme == 0 ? darkTickmarks : lightTickmarks);
+    
         
         // Battery
-        dc.drawBitmap(95, 22, batteryIcon);
-        dc.setColor(charge < 20 ? Gfx.COLOR_RED : Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.drawBitmap(95, 22, theme == 0 ? darkBatteryIcon : lightBatteryIcon);
+        dc.setColor(charge < 20 ? Gfx.COLOR_RED : fgColor, Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(97, 24 , 20.0 * charge / 100, 7);
     
         // Date        
         //dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
         //dc.fillRoundedRectangle(124, 81, 55, 18, 4);
         //dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
         dc.drawText(178, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
+
     
         // KCal
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
         dc.drawText(width * 0.5, 43, smallFont, kcalString, Gfx.TEXT_JUSTIFY_CENTER);        
+
 
         // BPM
         if (showBpmZones) {
@@ -164,21 +191,23 @@ class YotaClock2View extends Ui.WatchFace {
             } else if (currentZone == 5) {
                 dc.drawBitmap(40, 82, heartZone5Icon);
             } else {
-                dc.drawBitmap(40, 82, heartIcon);
+                dc.drawBitmap(40, 82, theme == 0 ? darkHeartIcon : lightHeartIcon);
             }
         } else {
-            dc.drawBitmap(40, 82, heartIcon);
+            dc.drawBitmap(40, 82, theme == 0 ? darkHeartIcon : lightHeartIcon);
         }
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);        
-        dc.drawText(60, 78, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
+        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);        
+        dc.drawText(62, 78, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
         
+    
         // Steps
-        dc.drawBitmap(78, 120, stepsIcon);
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        dc.drawBitmap(76, 120, theme == 0 ? darkStepsIcon : lightStepsIcon);
+        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
         dc.drawText(93, 116, smallFont, stepsString, Gfx.TEXT_JUSTIFY_LEFT);
     
+    
         // BLE
-        if (connected) { dc.drawBitmap(104, 142, bleIcon); }        
+        if (connected) { dc.drawBitmap(104, 142, theme == 0 ? darkBleIcon : lightBleIcon); }
         
     
         // Left Segments (Steps)    
@@ -204,13 +233,13 @@ class YotaClock2View extends Ui.WatchFace {
         }
                 
         dc.setPenWidth(11);           
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -146, -126);
         dc.setColor(Gfx.COLOR_DK_RED, Gfx.COLOR_TRANSPARENT);
         var seg1FillAngle = steps > stepsPerSegment1 ? -146 : (-126 - ((1 - (stepsPerSegment1 - steps.toDouble()) / stepsPerSegment1)) * 20.0).toNumber();
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg1FillAngle == -126 ? -127 : seg1FillAngle, -126);
 
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -168, -148);
         if (steps >= stepsPerSegment1) {
             dc.setColor(Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
@@ -218,7 +247,7 @@ class YotaClock2View extends Ui.WatchFace {
             dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg2FillAngle == -148 ? -149 : seg2FillAngle, -148);
         }        
 
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -190, -170);        
         if (steps >= stepsPerSegment2) {            
             dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
@@ -226,7 +255,7 @@ class YotaClock2View extends Ui.WatchFace {
             dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg3FillAngle == -170 ? -171 : seg3FillAngle, -170);
         }
         
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -212, -192);
         if (steps >= stepsPerSegment3) {            
             dc.setColor(Gfx.COLOR_DK_GREEN, Gfx.COLOR_TRANSPARENT);
@@ -234,7 +263,7 @@ class YotaClock2View extends Ui.WatchFace {
             dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg4FillAngle == -192 ? -193 : seg4FillAngle, -192);
         }
         
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -234, -214);
         if (steps >= stepsPerSegment4) {
             dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
@@ -246,7 +275,7 @@ class YotaClock2View extends Ui.WatchFace {
         // Right Bar
         var endAngle = kcal == 0 ? -53.99999 : ((kcal.toDouble() / goal.toDouble()) * 108d - 54.0).toNumber();        
                        
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawArc(width * 0.5, height * 0.5, 101, 0, -54, 54);        
         
         dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
@@ -265,26 +294,26 @@ class YotaClock2View extends Ui.WatchFace {
         
                 
         // Hour
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
         hour = (((clockTime.hour % 12) * 60) + clockTime.min);
         hour = hour / (12 * 60.0);
         hour = hour * Math.PI * 2;
         drawHand(dc, hour, 53, 5);
 
-        // Minute        
-        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+
+        // Minute                
         minute = ( clockTime.min / 60.0) * Math.PI * 2;
         drawHand(dc, minute, 85, 5);
 
+
         // Knob        
         dc.fillCircle(width * 0.5, height * 0.5, 4);
-        dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.setPenWidth(1);
         dc.drawCircle(width * 0.5, height * 0.5, 4);
     }
 
-    function drawHand(dc, angle, length, width) {
-        // Map out the coordinates of the watch hand
+    function drawHand(dc, angle, length, width) {        
         var coords  = [ [-(width/2),0], [-(width/2), -length], [width/2, -length], [width/2, 0] ];
         var result  = new [4];
         var centerX = dc.getWidth() / 2;
@@ -292,20 +321,12 @@ class YotaClock2View extends Ui.WatchFace {
         var cos     = Math.cos(angle);
         var sin     = Math.sin(angle);
 
-        // Transform the coordinates
         for (var i = 0; i < 4; i += 1) {
             var x = (coords[i][0] * cos) - (coords[i][1] * sin);
             var y = (coords[i][0] * sin) + (coords[i][1] * cos);
             result[i] = [ centerX + x, centerY + y];
         }
 
-        // Hour
-        //dc.fillRoundedRectangle(105, 37, 5, 53, 5);
-        // Minute
-        //dc.fillRoundedRectangle(105, 5, 5, 85, 5);
-
-
-        // Draw the polygon
         dc.fillPolygon(result);
     }
 

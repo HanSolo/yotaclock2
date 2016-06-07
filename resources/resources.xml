@@ -1,19 +1,25 @@
 <resources>
     <string id="AppName">YotaClock2</string>
 
-    <bitmap id="LauncherIcon"   filename="drawables/launcher_icon.png" />
-    <bitmap id="tickmarks"      filename="drawables/tickmarks.png" />
-    <bitmap id="batteryIcon"    filename="drawables/battery.png" />
-    <bitmap id="stepsIcon"      filename="drawables/steps.png" />
-    <bitmap id="heartIcon"      filename="drawables/heart.png" />
-    <bitmap id="heartZone1Icon" filename="drawables/heartZone1.png" />
-    <bitmap id="heartZone2Icon" filename="drawables/heartZone2.png" />
-    <bitmap id="heartZone3Icon" filename="drawables/heartZone3.png" />
-    <bitmap id="heartZone4Icon" filename="drawables/heartZone4.png" />
-    <bitmap id="heartZone5Icon" filename="drawables/heartZone5.png" />
-    <bitmap id="bleIcon"        filename="drawables/ble.png" />
+    <bitmap id="LauncherIcon"     filename="drawables/launcher_icon.png" />
+    <bitmap id="darkTickmarks"    filename="drawables/darkTickmarks.png" />
+    <bitmap id="lightTickmarks"   filename="drawables/lightTickmarks.png" />
+    <bitmap id="darkBatteryIcon"  filename="drawables/darkBattery.png" />
+    <bitmap id="lightBatteryIcon" filename="drawables/lightBattery.png" />
+    <bitmap id="darkStepsIcon"    filename="drawables/darkSteps.png" />
+    <bitmap id="lightStepsIcon"   filename="drawables/lightSteps.png" />
+    <bitmap id="darkHeartIcon"    filename="drawables/darkHeart.png" />
+    <bitmap id="lightHeartIcon"   filename="drawables/lightHeart.png" />
+    <bitmap id="heartZone1Icon"   filename="drawables/heartZone1.png" />
+    <bitmap id="heartZone2Icon"   filename="drawables/heartZone2.png" />
+    <bitmap id="heartZone3Icon"   filename="drawables/heartZone3.png" />
+    <bitmap id="heartZone4Icon"   filename="drawables/heartZone4.png" />
+    <bitmap id="heartZone5Icon"   filename="drawables/heartZone5.png" />
+    <bitmap id="darkBleIcon"      filename="drawables/darkBle.png" />
+    <bitmap id="lightBleIcon"     filename="drawables/lightBle.png" />
 
     <fonts>
-        <font id="roboto14Regular" filename="fonts/Roboto_Regular_14.fnt" filter="kcalADEFHIMNORSTUW0123456789. "/>
+        <font id="roboto14Regular" filename="fonts/Roboto_Regular_14.fnt" filter="kcalAEFHMORSTUW0123456789. "/>
+        <font id="roboto14Medium" filename="fonts/Roboto_Medium_14.fnt" filter="kcalAEFHMORSTUW0123456789. "/>
     </fonts>
 </resources>

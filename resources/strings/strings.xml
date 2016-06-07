@@ -13,5 +13,13 @@
 	<string id="Age">Age</string>
 	
 	<string id="BpmZones">Visualize BPM Zones</string>
+	
+	<string id="Theme">Color Theme</string>
+	<string id="Dark">Dark</string>
+	<string id="Light">Light</string>
+	
+	<string id="BoldFonts">Bold Fonts</string>
+	<string id="RegularFont">Regular Font</string>
+	<string id="BoldFont">Bold Font</string>
 
 </strings>

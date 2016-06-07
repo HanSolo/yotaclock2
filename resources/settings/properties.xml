@@ -5,5 +5,7 @@
     <property id="Height" type="number">189</property>
     <property id="Age"    type="number">46</property>
     <property id="BpmZones" type="boolean">true</property>
+    <property id="Theme" type="number">0</property>
+    <property id="BoldFonts" type="number">0</property>
     
 </properties>
