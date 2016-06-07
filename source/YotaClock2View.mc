@@ -170,7 +170,7 @@ class YotaClock2View extends Ui.WatchFace {
         //dc.fillRoundedRectangle(124, 81, 55, 18, 4);
         //dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
         dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawText(178, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
+        dc.drawText(177, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
 
     
         // KCal
@@ -181,23 +181,23 @@ class YotaClock2View extends Ui.WatchFace {
         // BPM
         if (showBpmZones) {
             if(currentZone == 1) {
-                dc.drawBitmap(40, 82, heartZone1Icon);
+                dc.drawBitmap(43, 84, heartZone1Icon);
             } else if (currentZone == 2) {
-                dc.drawBitmap(40, 82, heartZone2Icon);
+                dc.drawBitmap(43, 84, heartZone2Icon);
             } else if (currentZone == 3) {
-                dc.drawBitmap(40, 82, heartZone3Icon);
+                dc.drawBitmap(43, 84, heartZone3Icon);
             } else if (currentZone == 4) {
-                dc.drawBitmap(40, 82, heartZone4Icon);
+                dc.drawBitmap(43, 84, heartZone4Icon);
             } else if (currentZone == 5) {
-                dc.drawBitmap(40, 82, heartZone5Icon);
+                dc.drawBitmap(43, 84, heartZone5Icon);
             } else {
-                dc.drawBitmap(40, 82, theme == 0 ? darkHeartIcon : lightHeartIcon);
+                dc.drawBitmap(43, 84, theme == 0 ? darkHeartIcon : lightHeartIcon);
             }
         } else {
-            dc.drawBitmap(40, 82, theme == 0 ? darkHeartIcon : lightHeartIcon);
+            dc.drawBitmap(43, 84, theme == 0 ? darkHeartIcon : lightHeartIcon);
         }
         dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);        
-        dc.drawText(62, 78, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
+        dc.drawText(63, 79, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
         
     
         // Steps
@@ -307,7 +307,7 @@ class YotaClock2View extends Ui.WatchFace {
 
 
         // Knob        
-        dc.fillCircle(width * 0.5, height * 0.5, 4);
+        dc.fillCircle(width * 0.5, height * 0.5, 4);        
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.setPenWidth(1);
         dc.drawCircle(width * 0.5, height * 0.5, 4);
@@ -316,8 +316,8 @@ class YotaClock2View extends Ui.WatchFace {
     function drawHand(dc, angle, length, width) {        
         var coords  = [ [-(width/2),0], [-(width/2), -length], [width/2, -length], [width/2, 0] ];
         var result  = new [4];
-        var centerX = dc.getWidth() / 2;
-        var centerY = dc.getHeight() / 2;
+        var centerX = dc.getWidth() / 2.0;
+        var centerY = dc.getHeight() / 2.0;
         var cos     = Math.cos(angle);
         var sin     = Math.sin(angle);
 
