@@ -39,9 +39,16 @@
     </setting>
     
     <setting propertyKey="@Properties.Language" title="@Strings.Language">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.German</listEntry>
-            <listEntry value="1">@Strings.English</listEntry>
+        <settingConfig type="list">                        
+            <listEntry value="0">@Strings.Danish</listEntry>
+        	<listEntry value="1">@Strings.Dutch</listEntry>    
+            <listEntry value="2">@Strings.English</listEntry>
+            <listEntry value="3">@Strings.Finish</listEntry>
+        	<listEntry value="4">@Strings.French</listEntry>    
+            <listEntry value="5">@Strings.German</listEntry>
+        	<listEntry value="6">@Strings.Italian</listEntry>
+        	<listEntry value="7">@Strings.Spanish</listEntry>
+        	<listEntry value="8">@Strings.Swedish</listEntry>    
         </settingConfig>
     </setting>
 </settings>

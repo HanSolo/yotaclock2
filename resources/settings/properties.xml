@@ -7,6 +7,6 @@
     <property id="BpmZones" type="boolean">true</property>
     <property id="Theme" type="number">0</property>
     <property id="Fonts" type="number">1</property>
-    <property id="Language" type="number">0</property>
+    <property id="Language" type="number">2</property>
     
 </properties>

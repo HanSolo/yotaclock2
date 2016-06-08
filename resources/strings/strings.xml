@@ -23,8 +23,15 @@
 	<string id="MediumFont">Medium Font</string>
 	<string id="BoldFont">Bold Font</string>
 	
-	<string id="Language">Language</string>
-	<string id="German">German</string>
+	<string id="Language">Language</string>	
+	<string id="Danish">Danish</string>
+	<string id="Dutch">Dutch</string>
 	<string id="English">English</string>
+	<string id="Finish">Finish</string>
+	<string id="French">French</string>
+	<string id="German">German</string>
+	<string id="Italian">Italian</string>
+	<string id="Spanish">Spanish</string>		
+	<string id="Swedish">Swedish</string>
 
 </strings>

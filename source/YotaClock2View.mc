@@ -14,10 +14,19 @@ using Toybox.UserProfile as UserProfile;
 
 
 class YotaClock2View extends Ui.WatchFace {
-    enum { GERMAN, ENGLISH }
+    enum { DUTCH, ENGLISH, FINISH, FRENCH, GERMAN, ITALIAN, SPANISH, SWEDISH }
     enum { WOMAN, MEN }
+    const WEEKDAYS_DK = [ "SØ ", "MA ", "TI ", "ON ", "TO ", "FR ", "LØ " ];
+    const WEEKDAYS_NL = [ "ZO ", "MA ", "DI ", "WO ", "DO ", "VR ", "ZA " ];    
+    const WEEKDAYS_EN = [ "SU ", "MO ", "TU ", "WE ", "TH ", "FR ", "SA " ];    
+    const WEEKDAYS_FI = [ "SU ", "MA ", "TI ", "KE ", "TO ", "PE ", "LA " ];
+    const WEEKDAYS_FR = [ "DI ", "LU ", "MA ", "ME ", "JE ", "VE ", "SA " ];
     const WEEKDAYS_DE = [ "SO ", "MO ", "DI ", "MI ", "DO ", "FR ", "SA " ];
-    const WEEKDAYS_EN = [ "SU ", "MO ", "TU ", "WE ", "TH ", "FR ", "SA " ];
+    const WEEKDAYS_IT = [ "DO ", "LU ", "MA ", "ME ", "GI ", "VE ", "SA " ];
+    const WEEKDAYS_ES = [ "DO ", "LU ", "MA ", "MI ", "JU ", "VI ", "SA " ];    
+    const WEEKDAYS_SE = [ "SÖ ", "MÅ ", "TI ", "ON ", "TO ", "FR ", "LÖ " ];
+    const WEEKDAYS    = [ WEEKDAYS_DK, WEEKDAYS_NL, WEEKDAYS_EN, WEEKDAYS_FI, WEEKDAYS_FR, WEEKDAYS_DE, WEEKDAYS_ES, WEEKDAYS_SE ];
+    
     var font14Regular, font14Medium, font14Bold;
     var darkTickmarks, lightTickmarks;
     var darkBatteryIcon, lightBatteryIcon;
@@ -97,8 +106,8 @@ class YotaClock2View extends Ui.WatchFace {
                         
         var hour;
         var minute;
-        var dateString;               
-        dateString = Lang.format((language == GERMAN ? WEEKDAYS_DE[dayOfWeek - 1] : WEEKDAYS_EN[dayOfWeek - 1]) + nowinfo.day.format("%02d"));
+        var dateString;        
+        dateString = Lang.format((WEEKDAYS[language])[dayOfWeek - 1] + nowinfo.day.format("%02d"));        
         
         
         var profile = UserProfile.getProfile();
