@@ -14,7 +14,11 @@ using Toybox.UserProfile as UserProfile;
 
 
 class YotaClock2View extends Ui.WatchFace {
-    var font14Regular, font14Bold;
+    enum { GERMAN, ENGLISH }
+    enum { WOMAN, MEN }
+    const WEEKDAYS_DE = [ "SO ", "MO ", "DI ", "MI ", "DO ", "FR ", "SA " ];
+    const WEEKDAYS_EN = [ "SU ", "MO ", "TU ", "WE ", "TH ", "FR ", "SA " ];
+    var font14Regular, font14Medium, font14Bold;
     var darkTickmarks, lightTickmarks;
     var darkBatteryIcon, lightBatteryIcon;
     var darkStepsIcon, lightStepsIcon;
@@ -31,7 +35,8 @@ class YotaClock2View extends Ui.WatchFace {
     //! Load your resources here
     function onLayout(dc) {        
         font14Regular    = Ui.loadResource(Rez.Fonts.roboto14Regular);
-        font14Bold       = Ui.loadResource(Rez.Fonts.roboto14Medium);
+        font14Medium     = Ui.loadResource(Rez.Fonts.roboto14Medium);
+        font14Bold       = Ui.loadResource(Rez.Fonts.roboto14Bold);
         lightTickmarks   = Ui.loadResource(Rez.Drawables.lightTickmarks);
         darkTickmarks    = Ui.loadResource(Rez.Drawables.darkTickmarks);
         lightBatteryIcon = Ui.loadResource(Rez.Drawables.lightBatteryIcon);
@@ -59,6 +64,9 @@ class YotaClock2View extends Ui.WatchFace {
     function onUpdate(dc) {
         View.onUpdate(dc);
 
+        var fonts          = [ font14Regular, font14Medium, font14Bold ];
+        var bpmZoneIcons   = [ heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon ];
+
         // General
         var width          = dc.getWidth();
         var height         = dc.getHeight();        
@@ -83,28 +91,15 @@ class YotaClock2View extends Ui.WatchFace {
         var fgColor        = theme == 0 ? Gfx.COLOR_LT_GRAY : Gfx.COLOR_BLACK;
         var textColor      = theme == 0 ? Gfx.COLOR_WHITE : Gfx.COLOR_BLACK;
         var segmentBgColor = theme == 0 ? Gfx.COLOR_DK_GRAY : Gfx.COLOR_LT_GRAY;
-        var boldFonts      = Application.getApp().getProperty("BoldFonts");
-        var smallFont      = boldFonts == 0 ? font14Regular : font14Bold;
-        
-        
+        var selectedFont   = Application.getApp().getProperty("Fonts");       
+        var smallFont      = fonts[selectedFont];
+        var language       = Application.getApp().getProperty("Language");        
+                        
         var hour;
         var minute;
-        var dateString;
-        if (1 == dayOfWeek) { 
-            dateString = Lang.format("SU " + nowinfo.day.format("%02d")); 
-        } else if (2 == dayOfWeek) {
-            dateString = Lang.format("MO " + nowinfo.day.format("%02d"));
-        } else if (3 == dayOfWeek) {
-            dateString = Lang.format("TU " + nowinfo.day.format("%02d"));
-        } else if (4 == dayOfWeek) {
-            dateString = Lang.format("WE " + nowinfo.day.format("%02d"));
-        } else if (5 == dayOfWeek) {
-            dateString = Lang.format("TH " + nowinfo.day.format("%02d"));
-        } else if (6 == dayOfWeek) {
-            dateString = Lang.format("FR " + nowinfo.day.format("%02d"));
-        } else {
-            dateString = Lang.format("SA " + nowinfo.day.format("%02d")); 
-        }
+        var dateString;               
+        dateString = Lang.format((language == GERMAN ? WEEKDAYS_DE[dayOfWeek - 1] : WEEKDAYS_EN[dayOfWeek - 1]) + nowinfo.day.format("%02d"));
+        
         
         var profile = UserProfile.getProfile();
         var gender;
@@ -121,12 +116,13 @@ class YotaClock2View extends Ui.WatchFace {
             gender     = profile.gender;
             userWeight = profile.weight / 1000d;
             userHeight = profile.height;
-            userAge    = nowinfo.year - profile.birthYear;
+            userAge    = nowinfo.year - profile.birthYear;            
         }        
-        
-        var goalMen    = 66d + (13.7 * userWeight) + (5 * userHeight) - (6.8 * userAge);
-        var goalWoman  = 655d + (9.6 * userWeight) + (1.8 * userHeight) - (4.7 * userAge);
-        var goal       = gender == 1 ? goalMen : goalWoman;
+                        
+        // Mifflin-St.Jeor Formula (1990)
+        var goalMen   = (10.0 * userWeight) + (6.25 * userHeight) - (5 * userAge) + 5;
+        var goalWoman = (10.0 * userWeight) + (6.25 * userHeight) - (5 * userAge) - 161;                
+        var goal      = gender == MEN ? goalMen : goalWoman;
         
         
         var showBpmZones = Application.getApp().getProperty("BpmZones");
@@ -166,9 +162,6 @@ class YotaClock2View extends Ui.WatchFace {
         dc.fillRectangle(97, 24 , 20.0 * charge / 100, 7);
     
         // Date        
-        //dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-        //dc.fillRoundedRectangle(124, 81, 55, 18, 4);
-        //dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
         dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
         dc.drawText(177, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
 
@@ -180,19 +173,7 @@ class YotaClock2View extends Ui.WatchFace {
 
         // BPM
         if (showBpmZones) {
-            if(currentZone == 1) {
-                dc.drawBitmap(43, 84, heartZone1Icon);
-            } else if (currentZone == 2) {
-                dc.drawBitmap(43, 84, heartZone2Icon);
-            } else if (currentZone == 3) {
-                dc.drawBitmap(43, 84, heartZone3Icon);
-            } else if (currentZone == 4) {
-                dc.drawBitmap(43, 84, heartZone4Icon);
-            } else if (currentZone == 5) {
-                dc.drawBitmap(43, 84, heartZone5Icon);
-            } else {
-                dc.drawBitmap(43, 84, theme == 0 ? darkHeartIcon : lightHeartIcon);
-            }
+            dc.drawBitmap(43, 84, bpmZoneIcons[currentZone - 1]);            
         } else {
             dc.drawBitmap(43, 84, theme == 0 ? darkHeartIcon : lightHeartIcon);
         }

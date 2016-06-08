@@ -19,7 +19,8 @@
     <bitmap id="lightBleIcon"     filename="drawables/lightBle.png" />
 
     <fonts>
-        <font id="roboto14Regular" filename="fonts/Roboto_Regular_14.fnt" filter="kcalAEFHMORSTUW0123456789. "/>
-        <font id="roboto14Medium" filename="fonts/Roboto_Medium_14.fnt" filter="kcalAEFHMORSTUW0123456789. "/>
+        <font id="roboto14Regular" filename="fonts/Roboto_Regular_14.fnt" filter="kcalADEFHIMORSTUW0123456789. "/>
+        <font id="roboto14Medium" filename="fonts/Roboto_Medium_14.fnt" filter="kcalADEFHIMORSTUW0123456789. "/>
+        <font id="roboto14Bold" filename="fonts/Roboto_Bold_14.fnt" filter="kcalADEFHIMORSTUW0123456789. "/>
     </fonts>
 </resources>
