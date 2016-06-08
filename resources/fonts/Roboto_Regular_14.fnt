@@ -101,15 +101,14 @@ char id=125   x=202  y=21   width=7    height=21   xoffset=-1   yoffset=-1   xad
 char id=126   x=349  y=21   width=12   height=21   xoffset=-1   yoffset=-1   xadvance=10   page=0    chnl=0 
 kernings count=220
 kerning first=75 second=45 amount=-1
-kerning first=119 second=46 amount=-1
 kerning first=119 second=58 amount=-1
 kerning first=89 second=85 amount=-1
 kerning first=89 second=58 amount=-2
 kerning first=113 second=115 amount=-1
-kerning first=125 second=115 amount=-1
 kerning first=39 second=111 amount=-1
 kerning first=105 second=65 amount=-1
 kerning first=114 second=44 amount=-1
+kerning first=119 second=46 amount=-1
 kerning first=55 second=65 amount=-1
 kerning first=118 second=58 amount=-1
 kerning first=84 second=115 amount=-1
@@ -128,18 +127,19 @@ kerning first=47 second=65 amount=-1
 kerning first=83 second=65 amount=-1
 kerning first=119 second=65 amount=-1
 kerning first=88 second=45 amount=-1
+kerning first=70 second=58 amount=-2
 kerning first=62 second=115 amount=-1
 kerning first=53 second=111 amount=-1
 kerning first=125 second=111 amount=-1
 kerning first=86 second=44 amount=-1
 kerning first=68 second=58 amount=-1
 kerning first=103 second=111 amount=-1
+kerning first=54 second=65 amount=-1
 kerning first=68 second=46 amount=-1
 kerning first=105 second=115 amount=-1
 kerning first=47 second=111 amount=-1
 kerning first=83 second=111 amount=-1
 kerning first=119 second=111 amount=-1
-kerning first=70 second=44 amount=-2
 kerning first=89 second=74 amount=-1
 kerning first=89 second=46 amount=-2
 kerning first=46 second=39 amount=-2
@@ -153,7 +153,6 @@ kerning first=79 second=44 amount=-1
 kerning first=126 second=115 amount=-1
 kerning first=54 second=115 amount=-1
 kerning first=61 second=111 amount=-1
-kerning first=54 second=65 amount=-1
 kerning first=82 second=65 amount=-1
 kerning first=61 second=115 amount=-1
 kerning first=121 second=44 amount=-1
@@ -180,10 +179,10 @@ kerning first=92 second=65 amount=-1
 kerning first=71 second=115 amount=-1
 kerning first=107 second=115 amount=-1
 kerning first=62 second=111 amount=-1
-kerning first=63 second=65 amount=-1
 kerning first=84 second=113 amount=-1
 kerning first=56 second=111 amount=-1
 kerning first=92 second=111 amount=-1
+kerning first=84 second=109 amount=-1
 kerning first=79 second=58 amount=-1
 kerning first=34 second=65 amount=-1
 kerning first=70 second=65 amount=-1
@@ -193,8 +192,8 @@ kerning first=49 second=115 amount=-1
 kerning first=56 second=115 amount=-1
 kerning first=92 second=115 amount=-1
 kerning first=63 second=111 amount=-1
+kerning first=63 second=65 amount=-1
 kerning first=48 second=65 amount=-1
-kerning first=84 second=65 amount=-1
 kerning first=76 second=39 amount=-2
 kerning first=63 second=115 amount=-1
 kerning first=87 second=44 amount=-1
@@ -212,12 +211,11 @@ kerning first=113 second=111 amount=-1
 kerning first=87 second=58 amount=-1
 kerning first=84 second=97 amount=-1
 kerning first=62 second=65 amount=-1
-kerning first=70 second=58 amount=-2
+kerning first=70 second=44 amount=-2
 kerning first=76 second=86 amount=-1
 kerning first=76 second=87 amount=-1
 kerning first=84 second=99 amount=-1
 kerning first=84 second=100 amount=-1
-kerning first=84 second=109 amount=-1
 kerning first=84 second=110 amount=-1
 kerning first=84 second=112 amount=-1
 kerning first=84 second=45 amount=-2
@@ -231,6 +229,7 @@ kerning first=51 second=65 amount=-1
 kerning first=123 second=65 amount=-1
 kerning first=79 second=46 amount=-1
 kerning first=44 second=34 amount=-2
+kerning first=84 second=65 amount=-1
 kerning first=118 second=44 amount=-1
 kerning first=102 second=115 amount=-1
 kerning first=94 second=65 amount=-1
@@ -281,6 +280,7 @@ kerning first=84 second=44 amount=-2
 kerning first=51 second=111 amount=-1
 kerning first=123 second=111 amount=-1
 kerning first=84 second=46 amount=-2
+kerning first=125 second=115 amount=-1
 kerning first=53 second=115 amount=-1
 kerning first=76 second=84 amount=-1
 kerning first=116 second=111 amount=-1

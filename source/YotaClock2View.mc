@@ -246,23 +246,18 @@ class YotaClock2View extends Ui.WatchFace {
         }
         
         // Right Bar
-        var endAngle = kcal == 0 ? -53.99999 : ((kcal.toDouble() / goal.toDouble()) * 108d - 54.0).toNumber();        
-                       
-        dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(centerX, centerY, 101, 0, -54, 54);        
+        drawEnergyBar(dc, segmentBgColor, centerX, centerY, 54);
         
-        dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
-        
-        if (kcal > goal) {
-            dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
+        var endAngle = kcal == 0 ? -53.99999 : ((kcal.toDouble() / goal.toDouble()) * 108d - 54.0).toNumber();
+        drawEnergyBar(dc, Gfx.COLOR_DK_BLUE, centerX, centerY, endAngle);
+
+        if (kcal > goal) {            
             var endAngle = (((kcal - goal) / goal.toDouble()) * 108.0 - 54.0).toNumber();
-            dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
+            drawEnergyBar(dc, Gfx.COLOR_BLUE, centerX, centerY, endAngle);
         }
-        if (kcal > 2 * goal) {
-            dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
-            var endAngle = (((kcal - (2 * goal)) / goal.toDouble()) * 108.0 - 54.0).toNumber();
-            dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
+        if (kcal > 2 * goal) {            
+            var endAngle = (((kcal - (2 * goal)) / goal.toDouble()) * 108.0 - 54.0).toNumber();            
+            drawEnergyBar(dc, Gfx.COLOR_GREEN, centerX, centerY, endAngle);
         }
         
         // Hour
@@ -283,12 +278,17 @@ class YotaClock2View extends Ui.WatchFace {
         dc.drawCircle(centerX, centerY, 4);
     }
 
+    function drawEnergyBar(dc, color, centerX, centerY, endAngle) {
+        dc.setColor(color, Gfx.COLOR_TRANSPARENT);
+        dc.drawArc(centerX, centerY, 101, 0, -54, (endAngle > 54 ? 54 : endAngle));
+    }
+
     function drawHand(dc, centerX, centerY, angle, length, width) {        
         var coords  = [ [-(width/2),0], [-(width/2), -length], [width/2, -length], [width/2, 0] ];
         var result  = new [4];        
         var cos     = Math.cos(angle);
         var sin     = Math.sin(angle);
-
+        
         for (var i = 0; i < 4; i += 1) {
             var x = (coords[i][0] * cos) - (coords[i][1] * sin);
             var y = (coords[i][0] * sin) + (coords[i][1] * cos);
