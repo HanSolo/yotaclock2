@@ -14,10 +14,11 @@ using Toybox.UserProfile as UserProfile;
 
 
 class YotaClock2View extends Ui.WatchFace {
-    enum { GERMAN, ENGLISH }
+    enum { GERMAN, ENGLISH, FRENCH }
     enum { WOMAN, MEN }
     const WEEKDAYS_DE = [ "SO ", "MO ", "DI ", "MI ", "DO ", "FR ", "SA " ];
     const WEEKDAYS_EN = [ "SU ", "MO ", "TU ", "WE ", "TH ", "FR ", "SA " ];
+    const WEEKDAYS_FR = [ "DI ", "LU ", "MA ", "ME ", "JE ", "VE ", "SA " ];
     var font14Regular, font14Medium, font14Bold;
     var darkTickmarks, lightTickmarks;
     var darkBatteryIcon, lightBatteryIcon;
@@ -63,44 +64,45 @@ class YotaClock2View extends Ui.WatchFace {
     //! Update the view
     function onUpdate(dc) {
         View.onUpdate(dc);
-
-        var fonts          = [ font14Regular, font14Medium, font14Bold ];
+        
         var bpmZoneIcons   = [ heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon ];
-
+                
         // General
         var width          = dc.getWidth();
-        var height         = dc.getHeight();        
+        var height         = dc.getHeight();
+        var centerX        = width * 0.5;
+        var centerY        = height * 0.5;
         var clockTime      = Sys.getClockTime();
         var nowinfo        = Greg.info(Time.now(), Time.FORMAT_SHORT);
         var actinfo        = Act.getInfo();
         var systemStats    = Sys.getSystemStats();
         var hrIter         = Act.getHeartRateHistory(null, true);
-        var hr             = hrIter.next();        
+        var hr             = hrIter.next();
         var steps          = actinfo.steps;
         var stepGoal       = actinfo.stepGoal;
-        var stepsString    = steps.toString();
         var kcal           = actinfo.calories;
-        var kcalString     = kcal.toString() + " kcal";  
         var bpm            = (hr.heartRate != Act.INVALID_HR_SAMPLE && hr.heartRate > 0) ? hr.heartRate : 0;
-        var bpmString      = bpm > 0 ? bpm.toString() : "";
-        var charge         = systemStats.battery;                        
+        var charge         = systemStats.battery;
         var dayOfWeek      = nowinfo.day_of_week;
         var connected      = Sys.getDeviceSettings().phoneConnected;
-        var theme          = Application.getApp().getProperty("Theme");
-        var bgColor        = theme == 0 ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE;
-        var fgColor        = theme == 0 ? Gfx.COLOR_LT_GRAY : Gfx.COLOR_BLACK;
-        var textColor      = theme == 0 ? Gfx.COLOR_WHITE : Gfx.COLOR_BLACK;
+        var theme          = Application.getApp().getProperty("Theme");        
+        var fgColor        = theme == 0 ? Gfx.COLOR_WHITE : Gfx.COLOR_BLACK;
         var segmentBgColor = theme == 0 ? Gfx.COLOR_DK_GRAY : Gfx.COLOR_LT_GRAY;
-        var selectedFont   = Application.getApp().getProperty("Fonts");       
-        var smallFont      = fonts[selectedFont];
-        var language       = Application.getApp().getProperty("Language");        
-                        
+        var selectedFont   = (Application.getApp().getProperty("Fonts"));
+        var smallFont      = selectedFont == 0 ? font14Regular : selectedFont == 1 ? font14Medium : font14Bold;
+        var language       = Application.getApp().getProperty("Language");
+
         var hour;
         var minute;
-        var dateString;               
-        dateString = Lang.format((language == GERMAN ? WEEKDAYS_DE[dayOfWeek - 1] : WEEKDAYS_EN[dayOfWeek - 1]) + nowinfo.day.format("%02d"));
-        
-        
+        var dateString;        
+        if (language == GERMAN) {
+            dateString = Lang.format(WEEKDAYS_DE[dayOfWeek - 1] + nowinfo.day.format("%02d"));
+        } else if (language == FRENCH) {
+            dateString = Lang.format(WEEKDAYS_FR[dayOfWeek - 1] + nowinfo.day.format("%02d"));
+        } else {
+            dateString = Lang.format(WEEKDAYS_EN[dayOfWeek - 1] + nowinfo.day.format("%02d"));
+        }
+
         var profile = UserProfile.getProfile();
         var gender;
         var userWeight;
@@ -123,8 +125,7 @@ class YotaClock2View extends Ui.WatchFace {
         var goalMen   = (10.0 * userWeight) + (6.25 * userHeight) - (5 * userAge) + 5;
         var goalWoman = (10.0 * userWeight) + (6.25 * userHeight) - (5 * userAge) - 161;                
         var goal      = gender == MEN ? goalMen : goalWoman;
-        
-        
+                
         var showBpmZones = Application.getApp().getProperty("BpmZones");
         var maxBpm       = gender == 1 ? (223 - 0.9 * userAge).toNumber() : (226 - 1.0 * userAge).toNumber();        
         var bpmZone1     = (0.5 * maxBpm).toNumber();
@@ -133,7 +134,6 @@ class YotaClock2View extends Ui.WatchFace {
         var bpmZone4     = (0.8 * maxBpm).toNumber();
         var bpmZone5     = (0.9 * maxBpm).toNumber();
         var currentZone;
-                
         if (bpm >= bpmZone5) {
             currentZone = 5;
         } else if (bpm >= bpmZone4) {
@@ -145,31 +145,27 @@ class YotaClock2View extends Ui.WatchFace {
         } else {
             currentZone = 1;
         }
-                
-                
+
+
         // Clear the screen
         dc.setColor(theme == 0 ? Gfx.COLOR_BLACK : Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(0, 0, width, height);
-        
-        
+
         // Tickmarks
         dc.drawBitmap(0, 0, theme == 0 ? darkTickmarks : lightTickmarks);
-    
-        
+            
         // Battery
         dc.drawBitmap(95, 22, theme == 0 ? darkBatteryIcon : lightBatteryIcon);
-        dc.setColor(charge < 20 ? Gfx.COLOR_RED : fgColor, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(charge < 20 ? Gfx.COLOR_RED : (theme == 0 ? Gfx.COLOR_LT_GRAY : Gfx.COLOR_BLACK), Gfx.COLOR_TRANSPARENT);
         dc.fillRectangle(97, 24 , 20.0 * charge / 100, 7);
     
         // Date        
-        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);
         dc.drawText(177, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
-
     
         // KCal
-        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawText(width * 0.5, 43, smallFont, kcalString, Gfx.TEXT_JUSTIFY_CENTER);        
-
+        dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);
+        dc.drawText(centerX, 43, smallFont, (kcal.toString() + " kcal"), Gfx.TEXT_JUSTIFY_CENTER);        
 
         // BPM
         if (showBpmZones) {
@@ -177,20 +173,17 @@ class YotaClock2View extends Ui.WatchFace {
         } else {
             dc.drawBitmap(43, 84, theme == 0 ? darkHeartIcon : lightHeartIcon);
         }
-        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);        
-        dc.drawText(63, 79, smallFont, bpmString, Gfx.TEXT_JUSTIFY_LEFT);
+        dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);        
+        dc.drawText(63, 79, smallFont, (bpm > 0 ? bpm.toString() : ""), Gfx.TEXT_JUSTIFY_LEFT);
         
-    
         // Steps
         dc.drawBitmap(76, 120, theme == 0 ? darkStepsIcon : lightStepsIcon);
-        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawText(93, 116, smallFont, stepsString, Gfx.TEXT_JUSTIFY_LEFT);
-    
+        dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);
+        dc.drawText(93, 116, smallFont, steps, Gfx.TEXT_JUSTIFY_LEFT);
     
         // BLE
         if (connected) { dc.drawBitmap(104, 142, theme == 0 ? darkBleIcon : lightBleIcon); }
         
-    
         // Left Segments (Steps)    
         var stepsPerSegment1 = (stepGoal.toDouble() / 5.0).toNumber();
         var stepsPerSegment2 = (2.0 * stepsPerSegment1).toNumber();
@@ -215,90 +208,84 @@ class YotaClock2View extends Ui.WatchFace {
                 
         dc.setPenWidth(11);           
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -146, -126);
+        dc.drawArc(centerX, centerY, 101, 0, -146, -126);
         dc.setColor(Gfx.COLOR_DK_RED, Gfx.COLOR_TRANSPARENT);
         var seg1FillAngle = steps > stepsPerSegment1 ? -146 : (-126 - ((1 - (stepsPerSegment1 - steps.toDouble()) / stepsPerSegment1)) * 20.0).toNumber();
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg1FillAngle == -126 ? -127 : seg1FillAngle, -126);
+        dc.drawArc(centerX, centerY, 101, 0, seg1FillAngle == -126 ? -127 : seg1FillAngle, -126);
 
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -168, -148);
+        dc.drawArc(centerX, centerY, 101, 0, -168, -148);
         if (steps >= stepsPerSegment1) {
             dc.setColor(Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
             var seg2FillAngle = steps >= stepsPerSegment2 ? -168 : (-148 - ((1 - (stepsPerSegment2 - steps.toDouble()) / stepsPerSegment1)) * 20.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg2FillAngle == -148 ? -149 : seg2FillAngle, -148);
+            dc.drawArc(centerX, centerY, 101, 0, seg2FillAngle == -148 ? -149 : seg2FillAngle, -148);
         }        
 
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -190, -170);        
+        dc.drawArc(centerX, centerY, 101, 0, -190, -170);        
         if (steps >= stepsPerSegment2) {            
             dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
             var seg3FillAngle = steps >= stepsPerSegment3 ? -190 : (-170 - ((1 - (stepsPerSegment3 - steps.toDouble()) / stepsPerSegment1)) * 20.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg3FillAngle == -170 ? -171 : seg3FillAngle, -170);
+            dc.drawArc(centerX, centerY, 101, 0, seg3FillAngle == -170 ? -171 : seg3FillAngle, -170);
         }
         
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -212, -192);
+        dc.drawArc(centerX, centerY, 101, 0, -212, -192);
         if (steps >= stepsPerSegment3) {            
             dc.setColor(Gfx.COLOR_DK_GREEN, Gfx.COLOR_TRANSPARENT);
             var seg4FillAngle = steps >= stepsPerSegment4 ? -212 : (-192 - ((1 - (stepsPerSegment4 - steps.toDouble() )/ stepsPerSegment1)) * 20.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg4FillAngle == -192 ? -193 : seg4FillAngle, -192);
+            dc.drawArc(centerX, centerY, 101, 0, seg4FillAngle == -192 ? -193 : seg4FillAngle, -192);
         }
         
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -234, -214);
+        dc.drawArc(centerX, centerY, 101, 0, -234, -214);
         if (steps >= stepsPerSegment4) {
             dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
             var seg5FillAngle = steps >= stepsPerSegment5 ? -234 : (-214 - ((1 - (stepsPerSegment5 - steps.toDouble()) / stepsPerSegment1)) * 20.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, seg5FillAngle == -214 ? -215 : seg5FillAngle, -214);
+            dc.drawArc(centerX, centerY, 101, 0, seg5FillAngle == -214 ? -215 : seg5FillAngle, -214);
         }
         
-
         // Right Bar
         var endAngle = kcal == 0 ? -53.99999 : ((kcal.toDouble() / goal.toDouble()) * 108d - 54.0).toNumber();        
                        
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -54, 54);        
+        dc.drawArc(centerX, centerY, 101, 0, -54, 54);        
         
         dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT);
-        dc.drawArc(width * 0.5, height * 0.5, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
+        dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
         
         if (kcal > goal) {
             dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
             var endAngle = (((kcal - goal) / goal.toDouble()) * 108.0 - 54.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
+            dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
         }
         if (kcal > 2 * goal) {
             dc.setColor(Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
             var endAngle = (((kcal - (2 * goal)) / goal.toDouble()) * 108.0 - 54.0).toNumber();
-            dc.drawArc(width * 0.5, height * 0.5, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
+            dc.drawArc(centerX, centerY, 101, 0, -54, endAngle > 54 ? 54 : endAngle);
         }
         
-                
         // Hour
-        dc.setColor(textColor, Gfx.COLOR_TRANSPARENT);
+        dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);
         hour = (((clockTime.hour % 12) * 60) + clockTime.min);
         hour = hour / (12 * 60.0);
         hour = hour * Math.PI * 2;
-        drawHand(dc, hour, 53, 5);
-
+        drawHand(dc, centerX, centerY, hour, 53, 5);
 
         // Minute                
         minute = ( clockTime.min / 60.0) * Math.PI * 2;
-        drawHand(dc, minute, 85, 5);
-
+        drawHand(dc, centerX, centerY, minute, 85, 5);
 
         // Knob        
-        dc.fillCircle(width * 0.5, height * 0.5, 4);        
+        dc.fillCircle(centerX, centerY, 4);        
         dc.setColor(segmentBgColor, Gfx.COLOR_TRANSPARENT);
         dc.setPenWidth(1);
-        dc.drawCircle(width * 0.5, height * 0.5, 4);
+        dc.drawCircle(centerX, centerY, 4);
     }
 
-    function drawHand(dc, angle, length, width) {        
+    function drawHand(dc, centerX, centerY, angle, length, width) {        
         var coords  = [ [-(width/2),0], [-(width/2), -length], [width/2, -length], [width/2, 0] ];
-        var result  = new [4];
-        var centerX = dc.getWidth() / 2.0;
-        var centerY = dc.getHeight() / 2.0;
+        var result  = new [4];        
         var cos     = Math.cos(angle);
         var sin     = Math.sin(angle);
 
@@ -315,15 +302,11 @@ class YotaClock2View extends Ui.WatchFace {
     //! Called when this View is removed from the screen. Save the
     //! state of this View here. This includes freeing resources from
     //! memory.
-    function onHide() {
-    }
+    function onHide() {}
 
     //! The user has just looked at their watch. Timers and animations may be started here.
-    function onExitSleep() {
-    }
+    function onExitSleep() {}
 
     //! Terminate any active timers and prepare for slow updates.
-    function onEnterSleep() {
-    }
-
+    function onEnterSleep() {}
 }

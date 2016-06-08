@@ -42,6 +42,7 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.German</listEntry>
             <listEntry value="1">@Strings.English</listEntry>
+            <listEntry value="2">@Strings.French</listEntry>
         </settingConfig>
     </setting>
 </settings>
