@@ -4,6 +4,8 @@
     <bitmap id="lightTickmarks"   filename="lightTickmarks.png" />
     <bitmap id="darkBatteryIcon"  filename="darkBattery.png" />
     <bitmap id="lightBatteryIcon" filename="lightBattery.png" />
+    <bitmap id="darkBurnedIcon"   filename="darkBurned.png" />
+    <bitmap id="lightBurnedIcon"  filename="lightBurned.png" />
     <bitmap id="darkStepsIcon"    filename="darkSteps.png" />
     <bitmap id="lightStepsIcon"   filename="lightSteps.png" />
     <bitmap id="darkHeartIcon"    filename="darkHeart.png" />

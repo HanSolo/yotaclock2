@@ -6,6 +6,8 @@
     <bitmap id="lightTickmarks"   filename="drawables/lightTickmarks.png" />
     <bitmap id="darkBatteryIcon"  filename="drawables/darkBattery.png" />
     <bitmap id="lightBatteryIcon" filename="drawables/lightBattery.png" />
+    <bitmap id="darkBurnedIcon"   filename="drawables/darkBurned.png" />
+    <bitmap id="lightBurnedIcon"  filename="drawables/lightBurned.png" />
     <bitmap id="darkStepsIcon"    filename="drawables/darkSteps.png" />
     <bitmap id="lightStepsIcon"   filename="drawables/lightSteps.png" />
     <bitmap id="darkHeartIcon"    filename="drawables/darkHeart.png" />

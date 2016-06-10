@@ -1,0 +1,34 @@
+<strings>
+
+    <string id="AppName">YotaClock2</string>
+    
+    <string id="Gender">Gent</string>
+    <string id="Female">Féminin</string>
+    <string id="Male">Masculin</string>    
+
+	<string id="Weight">Poids [kg]</string>
+	
+	<string id="Height">Taille [cm]</string>
+	
+	<string id="Age">Âge</string>
+	
+	<string id="BpmZones">Voi les bpm zones</string>
+	
+	<string id="Theme">Schéma de couleurs</string>
+	<string id="Dark">Sombre</string>
+	<string id="Light">Brillant</string>
+	
+	<string id="Fonts">Type</string>
+	<string id="RegularFont">Standard type</string>
+	<string id="MediumFont">Moyen type</string>
+	<string id="BoldFont">Caractère gras</string>
+		
+	<string id="Sun">DI </string>
+	<string id="Mon">LU </string>
+	<string id="Tue">MA </string>
+	<string id="Wed">ME </string>
+	<string id="Thu">JE </string>
+	<string id="Fri">VE </string>
+	<string id="Sat">SA </string>	
+
+</strings>

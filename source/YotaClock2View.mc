@@ -13,15 +13,13 @@ using Toybox.Application as App;
 using Toybox.UserProfile as UserProfile;
 
 
-class YotaClock2View extends Ui.WatchFace {
-    enum { GERMAN, ENGLISH, FRENCH }
-    enum { WOMAN, MEN }
-    const WEEKDAYS_DE = [ "SO ", "MO ", "DI ", "MI ", "DO ", "FR ", "SA " ];
-    const WEEKDAYS_EN = [ "SU ", "MO ", "TU ", "WE ", "TH ", "FR ", "SA " ];
-    const WEEKDAYS_FR = [ "DI ", "LU ", "MA ", "ME ", "JE ", "VE ", "SA " ];
+class YotaClock2View extends Ui.WatchFace {    
+    enum { WOMAN, MEN }    
+    var weekdays = new [7];
     var font14Regular, font14Medium, font14Bold;
     var darkTickmarks, lightTickmarks;
     var darkBatteryIcon, lightBatteryIcon;
+    var darkBurnedIcon, lightBurnedIcon;
     var darkStepsIcon, lightStepsIcon;
     var darkHeartIcon, lightHeartIcon;
     var heartZone1Icon, heartZone2Icon, heartZone3Icon, heartZone4Icon, heartZone5Icon;
@@ -42,6 +40,8 @@ class YotaClock2View extends Ui.WatchFace {
         darkTickmarks    = Ui.loadResource(Rez.Drawables.darkTickmarks);
         lightBatteryIcon = Ui.loadResource(Rez.Drawables.lightBatteryIcon);
         darkBatteryIcon  = Ui.loadResource(Rez.Drawables.darkBatteryIcon);
+        lightBurnedIcon  = Ui.loadResource(Rez.Drawables.lightBurnedIcon);
+        darkBurnedIcon   = Ui.loadResource(Rez.Drawables.darkBurnedIcon);
         lightStepsIcon   = Ui.loadResource(Rez.Drawables.lightStepsIcon);
         darkStepsIcon    = Ui.loadResource(Rez.Drawables.darkStepsIcon);
         lightHeartIcon   = Ui.loadResource(Rez.Drawables.lightHeartIcon);
@@ -52,7 +52,14 @@ class YotaClock2View extends Ui.WatchFace {
         heartZone4Icon   = Ui.loadResource(Rez.Drawables.heartZone4Icon);
         heartZone5Icon   = Ui.loadResource(Rez.Drawables.heartZone5Icon);
         lightBleIcon     = Ui.loadResource(Rez.Drawables.lightBleIcon);
-        darkBleIcon      = Ui.loadResource(Rez.Drawables.darkBleIcon);        
+        darkBleIcon      = Ui.loadResource(Rez.Drawables.darkBleIcon);
+        weekdays[0]      = Ui.loadResource(Rez.Strings.Sun);
+        weekdays[1]      = Ui.loadResource(Rez.Strings.Mon);
+        weekdays[2]      = Ui.loadResource(Rez.Strings.Tue);
+        weekdays[3]      = Ui.loadResource(Rez.Strings.Wed);
+        weekdays[4]      = Ui.loadResource(Rez.Strings.Thu);
+        weekdays[5]      = Ui.loadResource(Rez.Strings.Fri);
+        weekdays[6]      = Ui.loadResource(Rez.Strings.Sat);        
     }
 
     //! Called when this View is brought to the foreground. Restore
@@ -90,19 +97,13 @@ class YotaClock2View extends Ui.WatchFace {
         var segmentBgColor = theme == 0 ? Gfx.COLOR_DK_GRAY : Gfx.COLOR_LT_GRAY;
         var selectedFont   = (Application.getApp().getProperty("Fonts"));
         var smallFont      = selectedFont == 0 ? font14Regular : selectedFont == 1 ? font14Medium : font14Bold;
-        var language       = Application.getApp().getProperty("Language");
 
         var hour;
         var minute;
         var dateString;        
-        if (language == GERMAN) {
-            dateString = Lang.format(WEEKDAYS_DE[dayOfWeek - 1] + nowinfo.day.format("%02d"));
-        } else if (language == FRENCH) {
-            dateString = Lang.format(WEEKDAYS_FR[dayOfWeek - 1] + nowinfo.day.format("%02d"));
-        } else {
-            dateString = Lang.format(WEEKDAYS_EN[dayOfWeek - 1] + nowinfo.day.format("%02d"));
-        }
-
+        
+        dateString = Lang.format(weekdays[dayOfWeek -1] + nowinfo.day.format("%02d"));
+        
         var profile = UserProfile.getProfile();
         var gender;
         var userWeight;
@@ -164,8 +165,9 @@ class YotaClock2View extends Ui.WatchFace {
         dc.drawText(177, 79, smallFont, dateString, Gfx.TEXT_JUSTIFY_RIGHT);
     
         // KCal
+        dc.drawBitmap(76, 46, theme == 0 ? darkBurnedIcon : lightBurnedIcon);
         dc.setColor(fgColor, Gfx.COLOR_TRANSPARENT);
-        dc.drawText(centerX, 43, smallFont, (kcal.toString() + " kcal"), Gfx.TEXT_JUSTIFY_CENTER);        
+        dc.drawText(93, 43, smallFont, kcal.toString(), Gfx.TEXT_JUSTIFY_LEFT);        
 
         // BPM
         if (showBpmZones) {
